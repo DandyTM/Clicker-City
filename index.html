@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no"
+  >
+  <title>Мой первый кликер</title>
+
+  <!-- Цвет темы для браузера -->
+  <meta name="theme-color" content="#111827">
+
+  <!-- Для айфона: полноэкранный режим и название -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Кликер">
+
+  <!-- Манифест для PWA -->
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <!-- Иконка на рабочий стол iOS -->
+  <link rel="apple-touch-icon" href="icon-180.png">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app">
+        <h1 class="title">Мой первый кликер</h1>
+
+        <div class="score-wrapper">
+        <span>Очки:</span>
+        <span id="score">0</span>
+        </div>
+
+        <div class="click-area">
+        <button id="click-button" class="click-button">
+            ЖМИ!
+        </button>
+        <div id="floating-points-container"></div>
+        </div>
+
+        <div class="shop">
+        <h2 class="shop-title">Магазин</h2>
+
+        <p class="shop-text">
+            Сила клика: <span id="click-power">1</span>
+        </p>
+        <button id="buy-upgrade" class="shop-button">
+            Улучшить клик (+1) — <span id="upgrade-cost">20</span> очков
+        </button>
+
+        <hr class="shop-divider">
+
+        <p class="shop-text">
+            Доход в секунду: <span id="income-per-second">0</span>
+        </p>
+        <button id="buy-income" class="shop-button">
+            Купить авто-доход (+1/сек) — <span id="income-cost">50</span> очков
+        </button>
+        </div>
+        <div class="goal-box">
+        <p class="goal-text">
+            Текущая цель: <span id="goal-value">100</span> очков
+        </p>
+        <p class="goal-status" id="goal-status">
+            Достигни цель, чтобы перейти на следующий уровень!
+        </p>
+        <button id="reset-button" class="reset-button">
+            Сбросить прогресс
+        </button>
+        </div>
+
+        <p class="hint">
+            Нажимай на кнопку, чтобы зарабатывать очки и покупать улучшения.
+        </p>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
