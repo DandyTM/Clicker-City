@@ -199,3 +199,9 @@ body {
     transform: scale(1);
   }
 }
+.floating-points.crit {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f97316;           /* ярко-оранжевый */
+  text-shadow: 0 0 8px rgba(249, 115, 22, 0.8);
+}
