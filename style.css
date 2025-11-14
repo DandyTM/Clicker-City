@@ -39,6 +39,52 @@ body {
   min-width: 40px;
 }
 
+/* Стартовый экран */
+
+.start-screen {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, #1f2937 0, #020617 60%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.start-content {
+  text-align: center;
+  padding: 24px;
+}
+
+.start-title {
+  font-size: 26px;
+  margin-bottom: 12px;
+}
+
+.start-subtitle {
+  font-size: 14px;
+  opacity: 0.9;
+  margin-bottom: 20px;
+}
+
+.start-button {
+  padding: 14px 24px;
+  font-size: 16px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: #22c55e;
+  color: #022c22;
+  box-shadow: 0 6px 0 #15803d;
+  font-weight: 600;
+  transition: transform 0.05s ease, box-shadow 0.05s ease;
+}
+
+.start-button:active {
+  transform: translateY(3px);
+  box-shadow: 0 3px 0 #15803d;
+}
+
 /* Кнопка клика и область вокруг неё */
 
 .click-area {
@@ -117,6 +163,47 @@ body {
   border: none;
   border-top: 1px solid #1f2937;
   margin: 12px 0;
+}
+
+/* Список генераторов */
+
+.generators-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.generator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.generator-info-block {
+  text-align: left;
+}
+
+.generator-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.generator-sub {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.generator-button {
+  padding: 8px 10px;
+  font-size: 13px;
+  box-shadow: 0 4px 0 #15803d;
+}
+
+.generator-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #15803d;
 }
 
 /* Цели */

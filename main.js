@@ -1,42 +1,46 @@
-// ---------- Текущее состояние игры ----------
+// ---------- Состояние игры ----------
 
 // энергия
 let score = 0;
 
 // уровни улучшений
-let clickLevel = 0;   // сколько раз улучшали клик
-let incomeLevel = 0;  // сколько генераторов авто-дохода куплено
-
-// цели
+let clickLevel = 0;           // улучшения клика
 let currentGoal = 100;
 
 // ранги (престиж)
-let prestigeLevel = 0;      // сколько раз повышали ранг
+let prestigeLevel = 0;
+
+// генераторы (солнечные панели, ферма, реактор)
+const generatorTypes = [
+  { id: 'solar',   baseCost: 50,   costGrowth: 1.25, baseIncome: 1 },
+  { id: 'farm',    baseCost: 300,  costGrowth: 1.3,  baseIncome: 5 },
+  { id: 'reactor', baseCost: 2000, costGrowth: 1.4,  baseIncome: 30 }
+];
+
+// уровни генераторов (сколько каждого куплено)
+let generators = generatorTypes.map(() => ({ level: 0 }));
 
 // криты
-const CRIT_CHANCE = 0.2;    // 20% шанс
-const CRIT_MULTIPLIER = 5;  // x5 за крит
+const CRIT_CHANCE = 0.2;      // 20% шанс
+const CRIT_MULTIPLIER = 5;    // x5 за крит
 
-// ---------- Экономика ----------
-
-// формулы цены: base * growth^level
+// экономика клика
 const BASE_CLICK_COST = 20;
-const CLICK_COST_GROWTH = 1.25;  // ~ +25% за уровень
+const CLICK_COST_GROWTH = 1.25;
 
-const BASE_INCOME_COST = 50;
-const INCOME_COST_GROWTH = 1.35; // ~ +35% за уровень
+// ранги: требования и бонус
+const PRESTIGE_BASE_REQUIREMENT = 100000;
+const PRESTIGE_REQ_GROWTH = 5;
+const PRESTIGE_PER_LEVEL_BONUS = 0.5; // +50% дохода за ранг
 
-// ранги
-const PRESTIGE_BASE_REQUIREMENT = 100000; // первая «перерождение» после 100к
-const PRESTIGE_REQ_GROWTH = 5;            // каждый следующий ранг ×5
-const PRESTIGE_PER_LEVEL_BONUS = 0.5;     // каждый ранг +50% ко всему доходу
-
-// производные значения (обновляются из уровней)
-let clickPower = 1;          // сила клика
-let incomePerSecond = 0;     // авто-доход
-let prestigeMultiplier = 1;  // множитель дохода от рангов
+// производные значения
+let clickPower = 1;
+let incomePerSecond = 0;
+let prestigeMultiplier = 1;
 let upgradeCost = BASE_CLICK_COST;
-let incomeCost = BASE_INCOME_COST;
+
+// стартовый флаг
+let gameStarted = false;
 
 // ---------- DOM-элементы ----------
 
@@ -48,8 +52,6 @@ const upgradeCostElement = document.getElementById('upgrade-cost');
 const buyUpgradeButton = document.getElementById('buy-upgrade');
 
 const incomePerSecondElement = document.getElementById('income-per-second');
-const incomeCostElement = document.getElementById('income-cost');
-const buyIncomeButton = document.getElementById('buy-income');
 
 const goalValueElement = document.getElementById('goal-value');
 const goalStatusElement = document.getElementById('goal-status');
@@ -61,26 +63,43 @@ const prestigeLevelElement = document.getElementById('prestige-level');
 const prestigeMultiplierElement = document.getElementById('prestige-multiplier');
 const prestigeButton = document.getElementById('prestige-button');
 
+// стартовый экран
+const startScreen = document.getElementById('start-screen');
+const startButton = document.getElementById('start-button');
+
+// DOM для генераторов
+const generatorDOM = generatorTypes.map(type => ({
+  levelEl: document.getElementById(`gen-${type.id}-level`),
+  costEl: document.getElementById(`gen-${type.id}-cost`),
+  buyEl: document.getElementById(`gen-${type.id}-buy`)
+}));
+
 // ---------- Вспомогательные функции экономики ----------
 
 function getClickPowerFromLevel() {
   return 1 + clickLevel;
 }
 
-function getIncomePerSecondFromLevel() {
-  return incomeLevel;
-}
-
-function getPrestigeMultiplierFromLevel() {
-  return 1 + prestigeLevel * PRESTIGE_PER_LEVEL_BONUS;
-}
-
 function getClickCostFromLevel() {
   return Math.floor(BASE_CLICK_COST * Math.pow(CLICK_COST_GROWTH, clickLevel));
 }
 
-function getIncomeCostFromLevel() {
-  return Math.floor(BASE_INCOME_COST * Math.pow(INCOME_COST_GROWTH, incomeLevel));
+function getGeneratorCost(index) {
+  const type = generatorTypes[index];
+  const level = generators[index].level;
+  return Math.floor(type.baseCost * Math.pow(type.costGrowth, level));
+}
+
+function getBaseIncomePerSecond() {
+  let total = 0;
+  generatorTypes.forEach((type, index) => {
+    total += type.baseIncome * generators[index].level;
+  });
+  return total;
+}
+
+function getPrestigeMultiplierFromLevel() {
+  return 1 + prestigeLevel * PRESTIGE_PER_LEVEL_BONUS;
 }
 
 function getPrestigeRequirement() {
@@ -89,13 +108,12 @@ function getPrestigeRequirement() {
   );
 }
 
-// пересчитать все производные значения из уровней
+// пересчитать производные значения
 function recomputeDerived() {
   clickPower = getClickPowerFromLevel();
-  incomePerSecond = getIncomePerSecondFromLevel();
+  incomePerSecond = getBaseIncomePerSecond();
   prestigeMultiplier = getPrestigeMultiplierFromLevel();
   upgradeCost = getClickCostFromLevel();
-  incomeCost = getIncomeCostFromLevel();
 }
 
 // ---------- Сохранение / загрузка ----------
@@ -104,9 +122,9 @@ function saveState() {
   const state = {
     score,
     clickLevel,
-    incomeLevel,
     currentGoal,
-    prestigeLevel
+    prestigeLevel,
+    generatorLevels: generators.map(g => g.level)
   };
   localStorage.setItem('clickerState', JSON.stringify(state));
 }
@@ -120,18 +138,15 @@ function loadState() {
 
   try {
     const state = JSON.parse(saved);
-
     if (typeof state.score === 'number') score = state.score;
+    if (typeof state.clickLevel === 'number') clickLevel = state.clickLevel;
     if (typeof state.currentGoal === 'number') currentGoal = state.currentGoal;
+    if (typeof state.prestigeLevel === 'number') prestigeLevel = state.prestigeLevel;
 
-    if (typeof state.clickLevel === 'number') {
-      clickLevel = state.clickLevel;
-    }
-    if (typeof state.incomeLevel === 'number') {
-      incomeLevel = state.incomeLevel;
-    }
-    if (typeof state.prestigeLevel === 'number') {
-      prestigeLevel = state.prestigeLevel;
+    if (Array.isArray(state.generatorLevels)) {
+      generators = generatorTypes.map((_, index) => ({
+        level: state.generatorLevels[index] || 0
+      }));
     }
   } catch (e) {
     console.warn('Не удалось загрузить сохранение', e);
@@ -163,7 +178,6 @@ function checkGoal() {
 function pulseScore() {
   if (!scoreElement) return;
   scoreElement.classList.remove('score-pulse');
-  // перезапуск анимации
   void scoreElement.offsetWidth;
   scoreElement.classList.add('score-pulse');
 }
@@ -189,14 +203,27 @@ function showFloatingPoints(text, isCrit = false) {
 
 function updateUI() {
   if (scoreElement) scoreElement.textContent = Math.floor(score);
+
   if (clickPowerElement) clickPowerElement.textContent = clickPower;
   if (upgradeCostElement) upgradeCostElement.textContent = upgradeCost;
 
-  if (incomePerSecondElement) incomePerSecondElement.textContent = incomePerSecond;
-  if (incomeCostElement) incomeCostElement.textContent = incomeCost;
+  // доход в секунду отображаем уже с учётом ранга
+  const effectiveIncome = incomePerSecond * prestigeMultiplier;
+  if (incomePerSecondElement) {
+    incomePerSecondElement.textContent = Math.floor(effectiveIncome);
+  }
 
   if (buyUpgradeButton) buyUpgradeButton.disabled = score < upgradeCost;
-  if (buyIncomeButton) buyIncomeButton.disabled = score < incomeCost;
+
+  // генераторы
+  generatorTypes.forEach((type, index) => {
+    const dom = generatorDOM[index];
+    const cost = getGeneratorCost(index);
+
+    if (dom.levelEl) dom.levelEl.textContent = generators[index].level;
+    if (dom.costEl) dom.costEl.textContent = cost;
+    if (dom.buyEl) dom.buyEl.disabled = score < cost;
+  });
 
   // ранги
   const req = getPrestigeRequirement();
@@ -224,9 +251,21 @@ function updateUI() {
 
 // ---------- Обработчики ----------
 
-// клик по основной кнопке (с критами и ранговым множителем)
+// старт игры
+if (startButton) {
+  startButton.addEventListener('click', () => {
+    gameStarted = true;
+    if (startScreen) {
+      startScreen.style.display = 'none';
+    }
+  });
+}
+
+// клик по основной кнопке
 if (clickButton) {
   clickButton.addEventListener('click', () => {
+    if (!gameStarted) return;
+
     const isCrit = Math.random() < CRIT_CHANCE;
 
     let gain = clickPower;
@@ -254,6 +293,7 @@ if (clickButton) {
 // улучшение клика
 if (buyUpgradeButton) {
   buyUpgradeButton.addEventListener('click', () => {
+    if (!gameStarted) return;
     if (score < upgradeCost) return;
 
     score -= upgradeCost;
@@ -265,21 +305,27 @@ if (buyUpgradeButton) {
   });
 }
 
-// покупка авто-дохода
-if (buyIncomeButton) {
-  buyIncomeButton.addEventListener('click', () => {
-    if (score < incomeCost) return;
+// покупка генераторов
+generatorTypes.forEach((type, index) => {
+  const dom = generatorDOM[index];
+  if (!dom.buyEl) return;
 
-    score -= incomeCost;
-    incomeLevel += 1;
+  dom.buyEl.addEventListener('click', () => {
+    if (!gameStarted) return;
+
+    const cost = getGeneratorCost(index);
+    if (score < cost) return;
+
+    score -= cost;
+    generators[index].level += 1;
 
     recomputeDerived();
     updateUI();
     saveState();
   });
-}
+});
 
-// обычный сброс прогресса (без смены ранга)
+// обычный сброс прогресса
 if (resetButton) {
   resetButton.addEventListener('click', () => {
     const confirmReset = confirm('Точно сбросить прогресс без повышения ранга?');
@@ -287,8 +333,8 @@ if (resetButton) {
 
     score = 0;
     clickLevel = 0;
-    incomeLevel = 0;
     currentGoal = 100;
+    generators = generatorTypes.map(() => ({ level: 0 }));
 
     recomputeDerived();
     saveState();
@@ -299,6 +345,8 @@ if (resetButton) {
 // переход в новый ранг (престиж)
 if (prestigeButton) {
   prestigeButton.addEventListener('click', () => {
+    if (!gameStarted) return;
+
     const requirement = getPrestigeRequirement();
     if (score < requirement) return;
 
@@ -312,8 +360,8 @@ if (prestigeButton) {
     // полный сброс прогресса
     score = 0;
     clickLevel = 0;
-    incomeLevel = 0;
     currentGoal = 100;
+    generators = generatorTypes.map(() => ({ level: 0 }));
 
     recomputeDerived();
     saveState();
@@ -324,8 +372,10 @@ if (prestigeButton) {
 // ---------- Авто-доход раз в секунду ----------
 
 setInterval(() => {
-  if (incomePerSecond > 0) {
-    const gain = incomePerSecond * prestigeMultiplier;
+  if (!gameStarted) return;
+
+  const gain = incomePerSecond * prestigeMultiplier;
+  if (gain > 0) {
     score += gain;
     updateUI();
     saveState();
@@ -335,6 +385,7 @@ setInterval(() => {
 // ---------- Старт ----------
 
 loadState();
+recomputeDerived();
 updateUI();
 
 // ---------- Регистрация сервис-воркера для PWA ----------

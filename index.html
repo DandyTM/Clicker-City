@@ -27,6 +27,20 @@
 </head>
 
 <body>
+  <!-- Стартовый экран -->
+  <div id="start-screen" class="start-screen">
+    <div class="start-content">
+      <h1 class="start-title">Генератор энергии</h1>
+      <p class="start-subtitle">
+        Запусти станцию и начни накапливать энергию.
+      </p>
+      <button id="start-button" class="start-button">
+        Нажми, чтобы начать
+      </button>
+    </div>
+  </div>
+
+  <!-- Основное приложение -->
   <div class="app">
     <h1 class="title">Генератор энергии</h1>
 
@@ -57,9 +71,45 @@
       <p class="shop-text">
         Энергия в секунду: <span id="income-per-second">0</span>
       </p>
-      <button id="buy-income" class="shop-button">
-        Купить генератор (+1/сек) — <span id="income-cost">50</span> энергии
-      </button>
+
+      <!-- Список генераторов -->
+      <div class="generators-list">
+        <div class="generator">
+          <div class="generator-info-block">
+            <div class="generator-title">Солнечные панели</div>
+            <div class="generator-sub">
+              Уровень: <span id="gen-solar-level">0</span> • +1/сек за панель
+            </div>
+          </div>
+          <button id="gen-solar-buy" class="shop-button generator-button">
+            Купить — <span id="gen-solar-cost">50</span> энергии
+          </button>
+        </div>
+
+        <div class="generator">
+          <div class="generator-info-block">
+            <div class="generator-title">Эко-ферма</div>
+            <div class="generator-sub">
+              Уровень: <span id="gen-farm-level">0</span> • +5/сек за ферму
+            </div>
+          </div>
+          <button id="gen-farm-buy" class="shop-button generator-button">
+            Купить — <span id="gen-farm-cost">300</span> энергии
+          </button>
+        </div>
+
+        <div class="generator">
+          <div class="generator-info-block">
+            <div class="generator-title">Реактор</div>
+            <div class="generator-sub">
+              Уровень: <span id="gen-reactor-level">0</span> • +30/сек за реактор
+            </div>
+          </div>
+          <button id="gen-reactor-buy" class="shop-button generator-button">
+            Купить — <span id="gen-reactor-cost">2000</span> энергии
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="goal-box">
@@ -89,7 +139,8 @@
     </div>
 
     <p class="hint">
-      Тапай по кнопке, улучшай генераторы и повышай ранг, чтобы качать всё быстрее ⚡
+      Сначала нажми «Нажми, чтобы начать», а потом тапай по кнопке,
+      улучшай генераторы и повышай ранг ⚡
     </p>
   </div>
 
