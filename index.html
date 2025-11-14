@@ -44,104 +44,281 @@
   <div class="app">
     <h1 class="title">Генератор энергии</h1>
 
-    <div class="score-wrapper">
-      <span>Энергия:</span>
-      <span id="score">0</span>
+    <!-- Верхнее меню -->
+    <div class="nav">
+      <button class="nav-button nav-button-active" data-screen="station">Станция</button>
+      <button class="nav-button" data-screen="research">Исследования</button>
+      <button class="nav-button" data-screen="achievements">Достижения</button>
+      <button class="nav-button" data-screen="settings">Настройки</button>
     </div>
 
-    <div class="click-area">
-      <button id="click-button" class="click-button">
-        ЖМИ
-      </button>
-      <div id="floating-points-container"></div>
+    <!-- Экран: станция -->
+    <div id="screen-station" class="screen screen-active">
+      <div class="score-wrapper">
+        <span>Энергия:</span>
+        <span id="score">0</span>
+      </div>
+
+      <div class="click-area">
+        <button id="click-button" class="click-button">
+          ЖМИ
+        </button>
+        <div id="floating-points-container"></div>
+      </div>
+
+      <div class="shop">
+        <h2 class="shop-title">Магазин</h2>
+
+        <p class="shop-text">
+          Сила клика: <span id="click-power">1</span>
+        </p>
+        <button id="buy-upgrade" class="shop-button">
+          Улучшить клик (+1) — <span id="upgrade-cost">20</span> энергии
+        </button>
+
+        <hr class="shop-divider">
+
+        <p class="shop-text">
+          Энергия в секунду: <span id="income-per-second">0</span>
+        </p>
+
+        <!-- Генераторы -->
+        <div class="generators-list">
+          <div class="generator">
+            <div class="generator-info-block">
+              <div class="generator-title">Солнечные панели ☀️</div>
+              <div class="generator-sub">
+                Уровень: <span id="gen-solar-level">0</span> • +1/сек за панель
+              </div>
+            </div>
+            <button id="gen-solar-buy" class="shop-button generator-button">
+              Купить — <span id="gen-solar-cost">50</span>
+            </button>
+          </div>
+
+          <div class="generator">
+            <div class="generator-info-block">
+              <div class="generator-title">Эко-ферма 🌾</div>
+              <div class="generator-sub">
+                Уровень: <span id="gen-farm-level">0</span> • +5/сек за ферму
+              </div>
+            </div>
+            <button id="gen-farm-buy" class="shop-button generator-button">
+              Купить — <span id="gen-farm-cost">300</span>
+            </button>
+          </div>
+
+          <div class="generator">
+            <div class="generator-info-block">
+              <div class="generator-title">Реактор ☢️</div>
+              <div class="generator-sub">
+                Уровень: <span id="gen-reactor-level">0</span> • +30/сек за реактор
+              </div>
+            </div>
+            <button id="gen-reactor-buy" class="shop-button generator-button">
+              Купить — <span id="gen-reactor-cost">2000</span>
+            </button>
+          </div>
+
+          <div class="generator">
+            <div class="generator-info-block">
+              <div class="generator-title">Орбитальная станция 🛰️</div>
+              <div class="generator-sub">
+                Уровень: <span id="gen-orbital-level">0</span> • +150/сек за станцию
+              </div>
+            </div>
+            <button id="gen-orbital-buy" class="shop-button generator-button">
+              Купить — <span id="gen-orbital-cost">15000</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="goal-box">
+        <p class="goal-text">
+          Текущая цель: <span id="goal-value">100</span> энергии
+        </p>
+        <p class="goal-status" id="goal-status">
+          Достигни цель, чтобы перейти на следующий уровень!
+        </p>
+        <button id="reset-button" class="reset-button">
+          Сбросить прогресс
+        </button>
+      </div>
+
+      <div class="prestige-box">
+        <p class="prestige-title">Ранги</p>
+        <p class="prestige-text">
+          Текущий ранг: <span id="prestige-level">0</span><br>
+          Множитель дохода: x<span id="prestige-multiplier">1.0</span>
+        </p>
+        <button id="prestige-button" class="prestige-button" disabled>
+          Для ранга 1 нужно 100&nbsp;000 энергии
+        </button>
+        <p class="prestige-hint">
+          Новый ранг сбрасывает прогресс, но навсегда увеличивает доход.
+        </p>
+      </div>
+
+      <p class="hint">
+        Станция: кликай по кнопке, покупай генераторы и повышай ранг ⚡
+      </p>
     </div>
 
-    <div class="shop">
-      <h2 class="shop-title">Магазин</h2>
-
-      <p class="shop-text">
-        Сила клика: <span id="click-power">1</span>
-      </p>
-      <button id="buy-upgrade" class="shop-button">
-        Улучшить клик (+1) — <span id="upgrade-cost">20</span> энергии
-      </button>
-
-      <hr class="shop-divider">
-
-      <p class="shop-text">
-        Энергия в секунду: <span id="income-per-second">0</span>
+    <!-- Экран: исследования -->
+    <div id="screen-research" class="screen">
+      <h2 class="screen-title">Исследования</h2>
+      <p class="screen-text">
+        Трать энергию на технологии, которые навсегда усиливают станцию.
       </p>
 
-      <!-- Список генераторов -->
-      <div class="generators-list">
-        <div class="generator">
-          <div class="generator-info-block">
-            <div class="generator-title">Солнечные панели</div>
-            <div class="generator-sub">
-              Уровень: <span id="gen-solar-level">0</span> • +1/сек за панель
+      <div class="research-list">
+        <div class="research-item">
+          <div class="research-header">
+            <div class="research-title">Эффективность клика</div>
+            <div class="research-level">
+              Уровень: <span id="res-click-level">0</span>/3
             </div>
           </div>
-          <button id="gen-solar-buy" class="shop-button generator-button">
-            Купить — <span id="gen-solar-cost">50</span> энергии
+          <p class="research-desc">
+            +25% энергии за клик за уровень.
+          </p>
+          <button id="res-click-buy" class="research-button">
+            Исследовать — <span id="res-click-cost">500</span> энергии
           </button>
         </div>
 
-        <div class="generator">
-          <div class="generator-info-block">
-            <div class="generator-title">Эко-ферма</div>
-            <div class="generator-sub">
-              Уровень: <span id="gen-farm-level">0</span> • +5/сек за ферму
+        <div class="research-item">
+          <div class="research-header">
+            <div class="research-title">Солнечные панели +</div>
+            <div class="research-level">
+              Уровень: <span id="res-solar-level">0</span>/3
             </div>
           </div>
-          <button id="gen-farm-buy" class="shop-button generator-button">
-            Купить — <span id="gen-farm-cost">300</span> энергии
+          <p class="research-desc">
+            +20% к доходу солнечных панелей за уровень.
+          </p>
+          <button id="res-solar-buy" class="research-button">
+            Исследовать — <span id="res-solar-cost">800</span> энергии
           </button>
         </div>
 
-        <div class="generator">
-          <div class="generator-info-block">
-            <div class="generator-title">Реактор</div>
-            <div class="generator-sub">
-              Уровень: <span id="gen-reactor-level">0</span> • +30/сек за реактор
+        <div class="research-item">
+          <div class="research-header">
+            <div class="research-title">Эффективность генераторов</div>
+            <div class="research-level">
+              Уровень: <span id="res-gen-level">0</span>/5
             </div>
           </div>
-          <button id="gen-reactor-buy" class="shop-button generator-button">
-            Купить — <span id="gen-reactor-cost">2000</span> энергии
+          <p class="research-desc">
+            +10% к доходу всех генераторов за уровень.
+          </p>
+          <button id="res-gen-buy" class="research-button">
+            Исследовать — <span id="res-gen-cost">1200</span> энергии
+          </button>
+        </div>
+
+        <div class="research-item">
+          <div class="research-header">
+            <div class="research-title">Крит-реакция</div>
+            <div class="research-level">
+              Уровень: <span id="res-crit-level">0</span>/3
+            </div>
+          </div>
+          <p class="research-desc">
+            +5% к шансу критического клика за уровень.
+          </p>
+          <button id="res-crit-buy" class="research-button">
+            Исследовать — <span id="res-crit-cost">1500</span> энергии
           </button>
         </div>
       </div>
     </div>
 
-    <div class="goal-box">
-      <p class="goal-text">
-        Текущая цель: <span id="goal-value">100</span> энергии
+    <!-- Экран: достижения -->
+    <div id="screen-achievements" class="screen">
+      <h2 class="screen-title">Достижения</h2>
+      <p class="screen-text">
+        Маленькие цели, которые показывают твой прогресс.
       </p>
-      <p class="goal-status" id="goal-status">
-        Достигни цель, чтобы перейти на следующий уровень!
-      </p>
-      <button id="reset-button" class="reset-button">
-        Сбросить прогресс
-      </button>
+
+      <div class="achievements-list">
+        <div class="achievement" id="ach-energy-1k">
+          <div class="achievement-title">Первые 1 000</div>
+          <div class="achievement-desc">Накопи 1 000 энергии за всё время.</div>
+          <div class="achievement-status">
+            Статус:
+            <span id="ach-energy-1k-status" class="achievement-status-text">Не выполнено</span>
+          </div>
+        </div>
+
+        <div class="achievement" id="ach-energy-100k">
+          <div class="achievement-title">Серьёзная мощность</div>
+          <div class="achievement-desc">Накопи 100 000 энергии за всё время.</div>
+          <div class="achievement-status">
+            Статус:
+            <span id="ach-energy-100k-status" class="achievement-status-text">Не выполнено</span>
+          </div>
+        </div>
+
+        <div class="achievement" id="ach-solar-10">
+          <div class="achievement-title">Солнечный парк</div>
+          <div class="achievement-desc">Купи 10 солнечных панелей.</div>
+          <div class="achievement-status">
+            Статус:
+            <span id="ach-solar-10-status" class="achievement-status-text">Не выполнено</span>
+          </div>
+        </div>
+
+        <div class="achievement" id="ach-gen-50">
+          <div class="achievement-title">Империя генераторов</div>
+          <div class="achievement-desc">Купи 50 генераторов любого типа суммарно.</div>
+          <div class="achievement-status">
+            Статус:
+            <span id="ach-gen-50-status" class="achievement-status-text">Не выполнено</span>
+          </div>
+        </div>
+
+        <div class="achievement" id="ach-prestige-1">
+          <div class="achievement-title">Новый уровень</div>
+          <div class="achievement-desc">Достигни ранга 1.</div>
+          <div class="achievement-status">
+            Статус:
+            <span id="ach-prestige-1-status" class="achievement-status-text">Не выполнено</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="prestige-box">
-      <p class="prestige-title">Ранги</p>
-      <p class="prestige-text">
-        Текущий ранг: <span id="prestige-level">0</span><br>
-        Множитель дохода: x<span id="prestige-multiplier">1.0</span>
-      </p>
-      <button id="prestige-button" class="prestige-button" disabled>
-        Для ранга 1 нужно 100&nbsp;000 энергии
-      </button>
-      <p class="prestige-hint">
-        Новый ранг сбрасывает прогресс, но навсегда увеличивает доход.
-      </p>
-    </div>
+    <!-- Экран: настройки -->
+    <div id="screen-settings" class="screen">
+      <h2 class="screen-title">Настройки</h2>
 
-    <p class="hint">
-      Сначала нажми «Нажми, чтобы начать», а потом тапай по кнопке,
-      улучшай генераторы и повышай ранг ⚡
-    </p>
+      <div class="settings-section">
+        <h3 class="settings-subtitle">Геймплей</h3>
+        <label class="settings-row">
+          <input type="checkbox" id="setting-crits" checked>
+          <span>Критические клики</span>
+        </label>
+      </div>
+
+      <div class="settings-section">
+        <h3 class="settings-subtitle">Сейв</h3>
+        <button id="btn-export-save" class="settings-button">
+          Экспорт сейва (в буфер)
+        </button>
+        <button id="btn-import-save" class="settings-button">
+          Импорт сейва (из текста)
+        </button>
+        <button id="btn-hard-reset" class="settings-button settings-button-danger">
+          Полный сброс игры
+        </button>
+        <p class="settings-note">
+          Экспорт создаст текстовую строку с сохранением. Скопируй её и храни где хочешь.
+          Импорт попросит вставить эту строку обратно.
+        </p>
+      </div>
+    </div>
   </div>
 
   <script src="main.js"></script>

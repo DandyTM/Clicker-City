@@ -16,14 +16,14 @@ body {
 
 .app {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
   padding: 24px;
   text-align: center;
 }
 
 .title {
   font-size: 24px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .score-wrapper {
@@ -83,6 +83,55 @@ body {
 .start-button:active {
   transform: translateY(3px);
   box-shadow: 0 3px 0 #15803d;
+}
+
+/* Навигация по экранам */
+
+.nav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.nav-button {
+  flex: 1;
+  padding: 8px 10px;
+  font-size: 13px;
+  border-radius: 999px;
+  border: 1px solid #1f2937;
+  background: #020617;
+  color: #e5e7eb;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.nav-button-active {
+  background: #22c55e;
+  color: #022c22;
+  border-color: #16a34a;
+}
+
+/* Экраны */
+
+.screen {
+  display: none;
+}
+
+.screen-active {
+  display: block;
+}
+
+.screen-title {
+  font-size: 18px;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.screen-text {
+  font-size: 13px;
+  opacity: 0.85;
+  text-align: left;
 }
 
 /* Кнопка клика и область вокруг неё */
@@ -299,6 +348,172 @@ body {
   margin-top: 8px;
   font-size: 12px;
   opacity: 0.8;
+}
+
+/* Исследования */
+
+.research-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.research-item {
+  padding: 12px;
+  border-radius: 12px;
+  background: #020617;
+  border: 1px solid #1f2937;
+  text-align: left;
+}
+
+.research-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.research-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.research-level {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.research-desc {
+  font-size: 12px;
+  opacity: 0.85;
+  margin-bottom: 8px;
+}
+
+.research-button {
+  width: 100%;
+  padding: 8px;
+  font-size: 13px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: #22c55e;
+  color: #022c22;
+  box-shadow: 0 4px 0 #15803d;
+  font-weight: 600;
+}
+
+.research-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.research-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #15803d;
+}
+
+/* Достижения */
+
+.achievements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.achievement {
+  padding: 12px;
+  border-radius: 12px;
+  background: #020617;
+  border: 1px solid #1f2937;
+  text-align: left;
+}
+
+.achievement-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.achievement-desc {
+  font-size: 12px;
+  opacity: 0.85;
+  margin-bottom: 4px;
+}
+
+.achievement-status {
+  font-size: 12px;
+}
+
+.achievement-unlocked {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.3);
+}
+
+/* Настройки */
+
+.settings-section {
+  margin-top: 12px;
+  text-align: left;
+  padding: 12px;
+  border-radius: 12px;
+  background: #020617;
+  border: 1px solid #1f2937;
+}
+
+.settings-subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.settings-row input {
+  transform: scale(1.1);
+}
+
+.settings-button {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px;
+  font-size: 13px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: #0ea5e9;
+  color: #0f172a;
+  box-shadow: 0 4px 0 #0369a1;
+  font-weight: 600;
+}
+
+.settings-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #0369a1;
+}
+
+.settings-button-danger {
+  background: #ef4444;
+  box-shadow: 0 4px 0 #b91c1c;
+  color: #fee2e2;
+}
+
+.settings-button-danger:active {
+  box-shadow: 0 2px 0 #b91c1c;
+}
+
+.settings-note {
+  font-size: 11px;
+  opacity: 0.75;
+  margin-top: 8px;
 }
 
 /* Подсказка внизу */
