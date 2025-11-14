@@ -9,6 +9,10 @@ let incomeCost = 50;        // цена покупки +1 к доходу
 
 let currentGoal = 100;      // следующая цель по очкам
 
+// параметры крита
+const CRIT_CHANCE = 0.1;    // 10% шанс
+const CRIT_MULTIPLIER = 5;  // крит даёт x5 от обычного клика
+
 // ---------- Элементы интерфейса ----------
 
 const scoreElement = document.getElementById('score');
@@ -67,7 +71,7 @@ function checkGoal() {
     goalStatusElement.textContent =
       `Отлично! Ты достиг цели ${currentGoal} очков. Новая цель уже выше!`;
 
-    // новая цель, например, x2 от прошлой
+    // новая цель — x2 от прошлой
     currentGoal = Math.floor(currentGoal * 2);
   } else {
     const remaining = currentGoal - score;
@@ -81,22 +85,23 @@ function checkGoal() {
 // пульс счёта при обновлении
 function pulseScore() {
   scoreElement.classList.remove('score-pulse');
-  // хак, чтобы анимация перезапускалась
-  void scoreElement.offsetWidth;
+  void scoreElement.offsetWidth; // перезапуск анимации
   scoreElement.classList.add('score-pulse');
 }
 
 // показываем всплывающее "+X" над кнопкой
-function showFloatingPoints(text) {
+function showFloatingPoints(text, isCrit = false) {
   if (!floatingContainer) return;
 
   const el = document.createElement('div');
   el.className = 'floating-points';
+  if (isCrit) {
+    el.classList.add('crit');
+  }
   el.textContent = text;
 
   floatingContainer.appendChild(el);
 
-  // удаляем элемент после окончания анимации
   setTimeout(() => {
     el.remove();
   }, 600);
@@ -123,13 +128,20 @@ function updateUI() {
 
 // ---------- Обработчики действий ----------
 
-// Клик по основной кнопке
+// Клик по основной кнопке (с критом)
 clickButton.addEventListener('click', () => {
-  score += clickPower;
+  const isCrit = Math.random() < CRIT_CHANCE;
+  const gain = isCrit ? clickPower * CRIT_MULTIPLIER : clickPower;
+
+  score += gain;
   updateUI();
   saveState();
 
-  showFloatingPoints(`+${clickPower}`);
+  if (isCrit) {
+    showFloatingPoints(`+${gain} CRIT!`, true);
+  } else {
+    showFloatingPoints(`+${gain}`);
+  }
 });
 
 // Покупка улучшения клика
@@ -186,7 +198,8 @@ setInterval(() => {
 
 loadState();
 updateUI();
-// ---------- Регистрация сервис-воркера для PWA ----------
+
+// ---------- (опционально) регистрация сервис-воркера для PWA ----------
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
