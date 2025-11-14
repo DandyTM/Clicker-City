@@ -9,9 +9,11 @@ let incomeCost = 50;        // цена покупки +1 к доходу
 
 let currentGoal = 100;      // следующая цель по очкам
 
-// параметры крита
-const CRIT_CHANCE = 0.1;    // 10% шанс
-const CRIT_MULTIPLIER = 5;  // крит даёт x5 от обычного клика
+const CRIT_CHANCE = 1;      // 100% шанс, КАЖДЫЙ клик — крит
+const CRIT_MULTIPLIER = 5;
+
+
+
 
 // ---------- Элементы интерфейса ----------
 

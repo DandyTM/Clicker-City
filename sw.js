@@ -1,4 +1,4 @@
-const CACHE_NAME = 'clicker-v1';
+const CACHE_NAME = 'clicker-v2'; // <<< было v1, главное — другое имя
 const ASSETS = [
   './',
   './index.html',
