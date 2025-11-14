@@ -31,7 +31,20 @@ body {
   justify-content: center;
   gap: 8px;
   font-size: 20px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
+}
+
+#score {
+  display: inline-block;
+  min-width: 40px;
+}
+
+/* Кнопка клика и область вокруг неё */
+
+.click-area {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 20px;
 }
 
 .click-button {
@@ -53,13 +66,10 @@ body {
   box-shadow: 0 4px 0 #c2410c;
 }
 
-.hint {
-  margin-top: 16px;
-  font-size: 14px;
-  opacity: 0.8;
-}
+/* Магазин */
+
 .shop {
-  margin-top: 24px;
+  margin-top: 8px;
   padding: 16px;
   border-radius: 16px;
   background: #020617;
@@ -102,13 +112,17 @@ body {
   box-shadow: none;
   transform: none;
 }
+
 .shop-divider {
   border: none;
   border-top: 1px solid #1f2937;
   margin: 12px 0;
 }
+
+/* Цели */
+
 .goal-box {
-  margin-top: 24px;
+  margin-top: 16px;
   padding: 16px;
   border-radius: 16px;
   background: #020617;
@@ -145,45 +159,71 @@ body {
   transform: translateY(3px);
   box-shadow: 0 2px 0 #b91c1c;
 }
-/* Контейнер для кнопки и всплывающих +X */
-.click-area {
-  display: inline-block;
-  position: relative;
-}
 
-/* Чтобы анимация масштаба у счёта работала корректно */
-#score {
-  display: inline-block;
-  min-width: 40px;
+/* Ранги / престиж */
+
+.prestige-box {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #020617;
+  border: 1px solid #1f2937;
   text-align: left;
 }
 
-/* Всплывающие "+X" */
-.floating-points {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -20%);
+.prestige-title {
   font-size: 16px;
   font-weight: 600;
-  pointer-events: none;
-  opacity: 0;
-  animation: float-up 0.6s ease-out forwards;
+  margin-bottom: 8px;
 }
 
-/* Анимация "вылета" вверх */
-@keyframes float-up {
-  0% {
-    transform: translate(-50%, -20%);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, -120%);
-    opacity: 0;
-  }
+.prestige-text {
+  font-size: 14px;
+  margin-bottom: 12px;
+  opacity: 0.95;
 }
 
-/* Пульс счёта */
+.prestige-button {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: #38bdf8;
+  color: #0f172a;
+  box-shadow: 0 4px 0 #0ea5e9;
+  font-weight: 600;
+  transition: transform 0.05s ease, box-shadow 0.05s ease, opacity 0.2s;
+}
+
+.prestige-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.prestige-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #0ea5e9;
+}
+
+.prestige-hint {
+  margin-top: 8px;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* Подсказка внизу */
+
+.hint {
+  margin-top: 16px;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+/* Анимации очков и всплывающих значений */
+
 #score.score-pulse {
   animation: score-pulse 0.15s ease-out;
 }
@@ -199,9 +239,38 @@ body {
     transform: scale(1);
   }
 }
+
+.floating-points {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -20%);
+  font-size: 16px;
+  font-weight: 600;
+  pointer-events: none;
+  opacity: 0;
+  animation: float-up 0.6s ease-out forwards;
+}
+
+@keyframes float-up {
+  0% {
+    transform: translate(-50%, -20%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -120%);
+    opacity: 0;
+  }
+}
+
 .floating-points.crit {
   font-size: 20px;
   font-weight: 700;
-  color: #f97316;           /* ярко-оранжевый */
+  color: #f97316;
   text-shadow: 0 0 8px rgba(249, 115, 22, 0.8);
+}
+
+.click-button.crit-click {
+  transform: scale(1.05);
+  box-shadow: 0 10px 0 #fbbf24;
 }

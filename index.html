@@ -6,7 +6,8 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0, user-scalable=no"
   >
-  <title>Мой первый кликер</title>
+
+  <title>Генератор энергии</title>
 
   <!-- Цвет темы для браузера -->
   <meta name="theme-color" content="#111827">
@@ -14,7 +15,7 @@
   <!-- Для айфона: полноэкранный режим и название -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Кликер">
+  <meta name="apple-mobile-web-app-title" content="Генератор">
 
   <!-- Манифест для PWA -->
   <link rel="manifest" href="manifest.webmanifest">
@@ -26,56 +27,72 @@
 </head>
 
 <body>
-    <div class="app">
-        <h1 class="title">Мой первый кликер</h1>
+  <div class="app">
+    <h1 class="title">Генератор энергии</h1>
 
-        <div class="score-wrapper">
-        <span>Очки:</span>
-        <span id="score">0</span>
-        </div>
-
-        <div class="click-area">
-        <button id="click-button" class="click-button">
-            ЖМИ!
-        </button>
-        <div id="floating-points-container"></div>
-        </div>
-
-        <div class="shop">
-        <h2 class="shop-title">Магазин</h2>
-
-        <p class="shop-text">
-            Сила клика: <span id="click-power">1</span>
-        </p>
-        <button id="buy-upgrade" class="shop-button">
-            Улучшить клик (+1) — <span id="upgrade-cost">20</span> очков
-        </button>
-
-        <hr class="shop-divider">
-
-        <p class="shop-text">
-            Доход в секунду: <span id="income-per-second">0</span>
-        </p>
-        <button id="buy-income" class="shop-button">
-            Купить авто-доход (+1/сек) — <span id="income-cost">50</span> очков
-        </button>
-        </div>
-        <div class="goal-box">
-        <p class="goal-text">
-            Текущая цель: <span id="goal-value">100</span> очков
-        </p>
-        <p class="goal-status" id="goal-status">
-            Достигни цель, чтобы перейти на следующий уровень!
-        </p>
-        <button id="reset-button" class="reset-button">
-            Сбросить прогресс
-        </button>
-        </div>
-
-        <p class="hint">
-            Нажимай на кнопку, чтобы зарабатывать очки и покупать улучшения.
-        </p>
+    <div class="score-wrapper">
+      <span>Энергия:</span>
+      <span id="score">0</span>
     </div>
-    <script src="main.js"></script>
+
+    <div class="click-area">
+      <button id="click-button" class="click-button">
+        ЖМИ
+      </button>
+      <div id="floating-points-container"></div>
+    </div>
+
+    <div class="shop">
+      <h2 class="shop-title">Магазин</h2>
+
+      <p class="shop-text">
+        Сила клика: <span id="click-power">1</span>
+      </p>
+      <button id="buy-upgrade" class="shop-button">
+        Улучшить клик (+1) — <span id="upgrade-cost">20</span> энергии
+      </button>
+
+      <hr class="shop-divider">
+
+      <p class="shop-text">
+        Энергия в секунду: <span id="income-per-second">0</span>
+      </p>
+      <button id="buy-income" class="shop-button">
+        Купить генератор (+1/сек) — <span id="income-cost">50</span> энергии
+      </button>
+    </div>
+
+    <div class="goal-box">
+      <p class="goal-text">
+        Текущая цель: <span id="goal-value">100</span> энергии
+      </p>
+      <p class="goal-status" id="goal-status">
+        Достигни цель, чтобы перейти на следующий уровень!
+      </p>
+      <button id="reset-button" class="reset-button">
+        Сбросить прогресс
+      </button>
+    </div>
+
+    <div class="prestige-box">
+      <p class="prestige-title">Ранги</p>
+      <p class="prestige-text">
+        Текущий ранг: <span id="prestige-level">0</span><br>
+        Множитель дохода: x<span id="prestige-multiplier">1.0</span>
+      </p>
+      <button id="prestige-button" class="prestige-button" disabled>
+        Для ранга 1 нужно 100&nbsp;000 энергии
+      </button>
+      <p class="prestige-hint">
+        Новый ранг сбрасывает прогресс, но навсегда увеличивает доход.
+      </p>
+    </div>
+
+    <p class="hint">
+      Тапай по кнопке, улучшай генераторы и повышай ранг, чтобы качать всё быстрее ⚡
+    </p>
+  </div>
+
+  <script src="main.js"></script>
 </body>
 </html>
